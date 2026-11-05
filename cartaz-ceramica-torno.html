@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Cartaz · Cerâmica no torno em 13 etapas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Commissioner:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+@page{size:A3 portrait;margin:0}
+:root{--ink:#1A1F2B;--muted:#4E5867;--line:#C9CFD6;--cobalt:#2B4A9E;--soft:#E7ECF7;--clay:#A1978C;--clay-d:#6E645B;
+  --display:"Gloock",Georgia,serif;--body:"Commissioner","Segoe UI",sans-serif;--mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{margin:0;background:#fff;color:var(--ink);font-family:var(--body)}
+.sheet{width:297mm;height:420mm;padding:12mm 13mm 10mm;display:flex;flex-direction:column;gap:5mm;overflow:hidden}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:10mm;border-bottom:1.2mm solid var(--ink);padding-bottom:5mm}
+h1{font-family:var(--display);font-weight:400;font-size:16mm;line-height:.95;margin:0;letter-spacing:-.3mm}
+h1 em{font-style:normal;color:var(--cobalt)}
+.by{font-family:var(--mono);font-size:3.4mm;color:var(--muted);letter-spacing:.3mm;margin-top:3mm}
+.legend{display:flex;flex-direction:column;gap:2.2mm;font-size:3.5mm;color:var(--muted);flex:none;width:72mm}
+.legend div{display:flex;align-items:center;gap:2.5mm}
+.legend svg{flex:none}
+.rule{font-weight:700;color:var(--ink);font-size:3.9mm;background:var(--soft);padding:2.2mm 3mm;border-radius:1.5mm}
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,auto);align-content:stretch;gap:0;border-top:.3mm solid var(--line)}
+.cell{display:grid;grid-template-columns:31mm 1fr;gap:4mm;padding:3.2mm 4mm 2.6mm 0;border-bottom:.3mm solid var(--line);min-height:0}
+.cell:nth-child(3n+2),.cell:nth-child(3n+3){padding-left:4mm;border-left:.3mm solid var(--line)}
+.cell.wide{grid-column:span 2;grid-template-columns:31mm 1fr 1fr;column-gap:5mm}
+.cell.wide .txt{grid-column:2/4;display:block;column-count:2;column-gap:5mm}
+.cell.wide .txt>*{margin-bottom:1.3mm;break-inside:avoid}
+.cell.wide .ph,.cell.wide h2{column-span:all}
+.art{display:flex;flex-direction:column;align-items:flex-start;gap:1mm}
+.n{font-family:var(--display);font-size:13mm;line-height:.85;color:var(--cobalt)}
+.art svg{width:31mm;height:auto;margin-top:auto}
+.txt{min-width:0;display:flex;flex-direction:column;gap:1.3mm}
+.ph{font-family:var(--mono);font-size:2.6mm;letter-spacing:.5mm;text-transform:uppercase;color:var(--cobalt)}
+h2{font-family:var(--display);font-weight:400;font-size:6mm;line-height:1.02;margin:0}
+h2 small{font-family:var(--body);font-size:3.3mm;color:var(--muted)}
+.txt p{margin:0;font-size:3.05mm;line-height:1.34}
+.txt b{font-weight:600}
+.note{font-size:2.95mm;font-weight:600;color:var(--cobalt);display:flex;gap:1.5mm;align-items:baseline}
+.final{background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:center;gap:2mm;padding:6mm;border-left:none!important;margin:4mm 0 4mm 4mm;flex-direction:column;justify-content:center}
+.final .big{font-family:var(--display);font-size:10mm;line-height:1}
+.final .sm{font-size:4.6mm;opacity:.85}
+.final .clean{font-family:var(--mono);font-size:3mm;letter-spacing:.4mm;margin-top:3mm;color:#B9C8F2}
+footer{display:flex;justify-content:space-between;font-family:var(--mono);font-size:2.8mm;color:var(--muted);letter-spacing:.2mm}
+</style></head><body>
+<div class="sheet">
+<header>
+  <div><h1>Cerâmica no torno<br>em <em>13 etapas</em></h1><div class="by">POR MAURICIO BRAZ · @mauriciobraz.ceramica</div></div>
+  <div class="legend">
+    <div class="rule">Da etapa 2 em diante: mãos sempre molhadas e cotovelos apoiados.</div>
+    <div><svg width="34" height="12" viewBox="0 0 34 12"><line x1="2" y1="6" x2="26" y2="6" stroke="#2B4A9E" stroke-width="3" stroke-linecap="round"/><path d="M24 1 L33 6 L24 11z" fill="#2B4A9E"/></svg>direção da pressão das mãos</div>
+    <div><svg width="34" height="12" viewBox="0 0 34 12"><rect x="1" y="0" width="32" height="12" fill="#A1978C"/></svg>argila vista em corte (fora de escala)</div>
+    <div><span style="color:#2B4A9E;font-weight:700;font-size:5mm;width:34px;text-align:center">↺</span>repetir ou voltar a uma etapa</div>
+  </div>
+</header>
+<div class="grid" id="grid"></div>
+<footer><span>Mauricio Braz · Cerâmica no torno</span><span>@mauriciobraz.ceramica</span></footer>
+</div>
+<script>
+const PHASES=[
+  {name:"Preparação",from:1,to:1},
+  {name:"Centragem",from:2,to:4},
+  {name:"Abertura",from:5,to:7},
+  {name:"Paredes",from:8,to:10},
+  {name:"Acabamento",from:11,to:13}
+];
+// perfis: metade direita do corte, 12 pontos [raio, altura] em cm (ilustrativos)
+const ball=[[0,0],[2.5,.6],[4.3,2.2],[5,4.5],[4.6,6.6],[3.6,8.2],[2.4,9.2],[1.6,9.5],[1.1,9.7],[.7,9.8],[.35,9.85],[0,9.9]];
+const dome=[[0,0],[6,0],[6.2,1],[5.9,2.6],[5.2,4],[4.2,5.1],[3,5.8],[2.2,6.1],[1.5,6.3],[.9,6.4],[.4,6.45],[0,6.5]];
+const cone=[[0,0],[4.6,0],[4.4,1.5],[3.8,3.5],[3.1,5.6],[2.4,7.6],[1.7,9.4],[1.2,10.4],[.8,11],[.5,11.4],[.25,11.6],[0,11.7]];
+const cent=[[0,0],[5.2,0],[5.3,1],[5.2,2.5],[5,3.8],[4.7,4.8],[4.1,5.4],[3,5.6],[2,5.65],[1.2,5.7],[.6,5.7],[0,5.7]];
+const hole=[[0,0],[5.2,0],[5.3,1],[5.2,2.5],[5,3.8],[4.7,4.8],[4.1,5.4],[2.2,5.6],[1.1,5.4],[.9,4],[.7,1.5],[0,1.2]];
+const open=[[0,0],[5.4,0],[5.6,1],[5.6,2.5],[5.5,3.8],[5.3,4.7],[5,5.1],[4.2,5],[3.6,4.2],[3.1,1.9],[2,1.3],[0,1.2]];
+const floor=[[0,0],[5.4,0],[5.6,1],[5.6,2.5],[5.5,3.8],[5.3,4.7],[5,5.1],[4.2,5],[3.7,4],[3.5,1.4],[2.5,1.1],[0,1.1]];
+const wall90=[[0,0],[5.4,0],[5.4,1],[5.4,2.5],[5.4,3.8],[5.4,4.8],[5.3,5.4],[3.9,5.4],[3.8,4.5],[3.8,1.3],[3.4,1.1],[0,1.1]];
+const tall=[[0,0],[4.4,0],[4.5,1],[4.4,4],[4.3,7],[4.2,10],[4.2,12.6],[3.6,12.6],[3.65,9],[3.75,1.4],[3.3,1.1],[0,1.1]];
+const vase=[[0,0],[3.6,0],[4.6,1.8],[5.6,4.5],[5.2,8],[3.4,10.8],[3.8,12.8],[3.3,12.8],[2.95,10.8],[4.9,4.6],[2.9,1.15],[0,1.1]];
+
+const STEPS=[
+ {t:"Organize o espaço e sove a argila",p:ball,rpm:"stop",
+  d:["Visualize ou desenhe a forma que deseja criar. Organize as ferramentas necessárias, água e um local para descansar a peça pronta.","Sove a quantidade adequada de argila, modelando uma bola ou cone sem bolhas de ar."],
+  chips:[["Sem bolhas de ar"]],arrows:[]},
+ {t:"Fixe a argila no centro do torno",p:dome,
+  d:["A partir daqui, <b>mãos sempre molhadas e cotovelos apoiados</b>.","Com uma mão pressione de cima para baixo e com a outra, firme na lateral, modele a argila em forma de meia bola, bem fixada ao disco."],
+  chips:[["Mãos molhadas","k"],["Cotovelos apoiados","k"]],arrows:[[0,9,0,7],[8.6,3,6.6,3]]},
+ {t:"Compacte a argila",p:cone,sub:"2 partes",
+  d:["<b>Parte 1:</b> com ao menos um cotovelo apoiado, abrace a argila deixando espaço entre os punhos. Pressione em baixo uma mão contra a outra em direção ao centro, e a massa irá subir. Guie esse movimento até a ponta formando um cone. Se formar um “vulcão”, pressione o topo formando um cone e recomece.","<b>Parte 2:</b> com uma mão em concha no topo e a outra na base ou logo abaixo, empurre o topo levemente para frente e para baixo, voltando à forma de meia bola.","Repita as Partes 1 e 2 ao menos 3 vezes."],
+  chips:[["Repita ao menos 3×","k"]],arrows:[[7,1.5,5.2,1.5],[-7,1.5,-5.2,1.5],[2.2,5,1.2,9.5]]},
+ {t:"Centralize a massa",p:cent,
+  d:["Leve a argila completamente para o centro com firmeza, alinhando o topo e as laterais ao eixo do torno. Uma mão domina o topo e a outra a base.","Se suas mãos balançarem ou a massa oscilar visualmente, repita ou retorne ao passo 3."],
+  chips:[["Oscilou? volte ao passo 3",null,3]],arrows:[[-2.5,8.6,-2.5,6.4],[8,2,5.9,2]]},
+ {t:"Faça o furo",p:hole,
+  d:["Com os polegares unidos, pressione exatamente no centro da massa. Lubrifique durante o processo.","Pare ao alcançar 1 cm ou mais de espessura de fundo. Verifique com uma agulha, com os dedos ou visualmente."],
+  chips:[["Fundo ≥ 1 cm","k"],["Lubrifique"]],arrows:[[0,8.5,0,5.2]],floor:true},
+ {t:"Abra a massa",p:open,
+  d:["Com as mãos dentro do furo, abra de dentro para fora em sincronia com a rotação do torno.","Mantenha pressão constante e cuide para que o fundo fique com espessura nivelada."],
+  chips:[["Pressão constante"]],arrows:[[1,2.6,3.2,2.6],[-1,2.6,-3.2,2.6]]},
+ {t:"Compacte o fundo",p:floor,rpm:"slow",
+  d:["Reduza a rotação do torno.","Com o dedo, esponja ou ferramenta, faça movimentos lentos da borda para o centro (e o contrário), repetidamente, para compactar e nivelar bem o fundo."],
+  chips:[["Rotação reduzida","k"]],arrows:[[3,1.9,.4,1.9],[.4,1.9,3,1.9]]},
+ {t:"Forme paredes em 90º",p:wall90,
+  d:["Com uma mão por dentro e outra por fora, pressione toda a parede formando um ângulo reto entre o fundo e as paredes interna e externa."],
+  chips:[["Ângulo de 90º","k"]],arrows:[[2.2,3,3.6,3],[7.6,3,5.6,3]],right:true},
+ {t:"Suba a parede",p:tall,
+  d:["Com a argila bem lubrificada, aperte a parede desde a base até o topo com uma mão e use a outra do outro lado da parede como apoio. Isso vai fazer a massa subir.","Repita quantas vezes for necessário, ajustando a pressão para controlar e igualar a espessura ao longo de toda a parede."],
+  chips:[["Lubrifique"],["Repita o necessário","k"]],arrows:[[5.4,1.5,5.4,11.5]]},
+ {t:"Dê forma à peça",p:vase,
+  d:["Com as mãos e/ou ferramentas, modele a peça com movimentos delicados de dentro para fora (ou vice-versa), puxando, empurrando, enforcando ou repetindo o passo 9 com variações.","Respeite a velocidade do torno para que a pressão seja igual em toda a volta."],
+  chips:[["Pode repetir o passo 9",null,9]],arrows:[[3.4,4.6,4.6,4.6],[5.4,10.8,3.8,10.8]]},
+ {t:"Seque a parte externa",p:vase,
+  d:["Use esponja ou ferramenta em movimentos ascendentes para secar a parte de fora, apoiando com uma mão por dentro.","Se a peça for fechada e você não puder colocar a mão dentro, faça primeiro o passo 12."],
+  chips:[["Peça fechada? faça antes o 12",null,12]],arrows:[[6.6,1.5,6.6,9]]},
+ {t:"Seque a parte interna",p:vase,
+  d:["Com cuidado, use esponja ou ferramenta para secar o interior.","Como não haverá apoio externo (a menos que use ferramentas dos dois lados), seja muito delicado para preservar a forma."],
+  chips:[["Muito delicado","k"]],arrows:[[3.4,2,4.2,7.5]]},
+ {t:"Solte a peça do torno",p:vase,cut:true,
+  d:["Use linha de nylon, arame ou cabo de aço para cortar a base da peça. Passe a linha entre a peça e o prato do torno, num movimento firme e contínuo.","Jogue um pouco de água no prato e passe a linha novamente, lubrificando o espaço criado.","Leve a peça até a borda do prato, encaixe as pontas dos dedos sob o fundo, uma de cada vez, e levante a peça com segurança. Coloque-a no local escolhido: primeiro a base, depois retire a mão com agilidade para preservar a forma."],
+  chips:[["Linha 2× com água","k"],["Base primeiro"]],arrows:[]}
+];
+const NOTES={3:"↺ Repita as Partes 1 e 2 ao menos 3×",4:"↺ Oscilou? Volte à etapa 3",9:"↺ Repita quantas vezes for necessário",10:"↺ Pode repetir a etapa 9 com variações",11:"↺ Peça fechada? Faça antes a etapa 12",7:"Rotação reduzida"};
+const NS="http://www.w3.org/2000/svg";
+const el=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const C=90,B=150,S=9.4,X=x=>C+x*S,Y=y=>B-y*S;
+function full(p){const R=p.map(([x,y])=>[X(x),Y(y)]);const L=p.slice(1,11).reverse().map(([x,y])=>[X(-x),Y(y)]);return R.concat(L)}
+function smooth(pts){const n=pts.length;let d=`M${pts[0][0]} ${pts[0][1]}`;
+  for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+  d+=`C${p1[0]+(p2[0]-p0[0])/6} ${p1[1]+(p2[1]-p0[1])/6} ${p2[0]-(p3[0]-p1[0])/6} ${p2[1]-(p3[1]-p1[1])/6} ${p2[0]} ${p2[1]}`}return d+"Z"}
+function art(s,i){
+  const svg=el("svg",{viewBox:"0 0 180 175"});
+  const cp=el("clipPath",{id:"c"+i},el("defs",{},svg));el("rect",{x:0,y:0,width:180,height:B},cp);
+  const mk=el("marker",{id:"a"+i,viewBox:"0 0 10 10",refX:6,refY:5,markerWidth:3.4,markerHeight:3.4,orient:"auto"},svg.firstChild);
+  el("path",{d:"M0 0L10 5L0 10z",fill:"#2B4A9E"},mk);
+  el("path",{d:smooth(full(s.p)),fill:"#A1978C","clip-path":`url(#c${i})`},svg);
+  el("rect",{x:12,y:B,width:156,height:9,rx:2,fill:"#6E645B"},svg);
+  el("rect",{x:83,y:B+9,width:14,height:14,fill:"#6E645B"},svg);
+  s.arrows.forEach(([a,b,c,d])=>el("line",{x1:X(a),y1:Y(b),x2:X(c),y2:Y(d),stroke:"#2B4A9E","stroke-width":5,"stroke-linecap":"round","marker-end":`url(#a${i})`},svg));
+  if(s.floor){el("line",{x1:X(-3.4),y1:Y(0),x2:X(-3.4),y2:Y(1.2),stroke:"#1A1F2B","stroke-width":1.5},svg);
+    const t=el("text",{x:X(-3.9),y:Y(.3),"text-anchor":"end","font-size":15,"font-family":"IBM Plex Mono, monospace",fill:"#1A1F2B"},svg);t.textContent="≥1 cm";}
+  if(s.right)[1,-1].forEach(g=>el("path",{d:`M${X(g*3.8)-g*11} ${Y(1.1)} v-11 h${g*11}`,fill:"none",stroke:"#2B4A9E","stroke-width":2.5},svg));
+  if(s.cut){el("line",{x1:4,y1:B-1,x2:176,y2:B-1,stroke:"#2B4A9E","stroke-width":3,"stroke-dasharray":"7 5"},svg);}
+  if(s.rpm==="slow"){const t=el("text",{x:90,y:B+7,"text-anchor":"middle","font-size":8,"font-family":"IBM Plex Mono, monospace",fill:"#fff"},svg);t.textContent="ROTAÇÃO REDUZIDA";}
+  return svg;
+}
+const g=document.getElementById("grid");
+const phaseOf=n=>PHASES.find(p=>n>=p.from&&n<=p.to).name;
+STEPS.forEach((s,i)=>{const n=i+1;const c=document.createElement("div");c.className="cell"+(n===13?" wide":"");
+  const a=document.createElement("div");a.className="art";a.innerHTML=`<div class="n">${n}</div>`;a.appendChild(art(s,i));c.appendChild(a);
+  const t=document.createElement("div");t.className="txt";
+  const body=s.d.filter(x=>!(n===3&&x.startsWith("Repita"))).map(x=>`<p>${x}</p>`).join("");
+  t.innerHTML=`<div class="ph">${phaseOf(n)}</div><h2>${s.t}${s.sub?` <small>(${s.sub})</small>`:""}</h2>${body}${NOTES[n]?`<div class="note">${NOTES[n]}</div>`:""}`;
+  c.appendChild(t);g.appendChild(c)});
+const f=document.createElement("div");f.className="cell final";
+f.innerHTML=`<div class="big">Parabéns,<br>peça pronta!</div><div class="sm" style="font-family:var(--display);font-size:6mm;opacity:1;color:#B9C8F2">Agora limpe o torno.</div>`;
+g.appendChild(f);
+</script></body></html>
